@@ -1,0 +1,11 @@
+.header {
+  background-color: #ffffff;
+  padding: 10px 0px;
+}
+
+.header__logo-image {
+  width: 94px;
+  height: 26px;
+  display: block;
+  margin: auto;
+}
