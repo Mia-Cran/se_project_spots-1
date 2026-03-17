@@ -1,3 +1,13 @@
+import { enableValidation } from "../scripts/validation.js";
+import '../pages/index.css';
+import headerLogo from '../images/header-logo.svg';
+import profilePic from '../images/profilepic.jpg';  
+import plusSign from '../images/plus-sign.svg';
+
+document.querySelector('.header__logo-image').src = headerLogo;
+document.querySelector('.profile__picture').src = profilePic;
+document.querySelector('.plus-sign ').src = plusSign;
+
 const initialCards = [
   {
     name: "Val Thorens",
@@ -28,6 +38,16 @@ const initialCards = [
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/7-photo-by-griffin-wooldridge-from-pexels.jpg",
   },
 ];
+
+
+const settings = {
+  formSelector: ".modal__form",
+  inputSelector: ".modal__input",
+  submitButtonSelector: ".modal__submit-btn",
+  inactiveButtonClass: "button_inactive",
+  inputErrorClass: "modal__input_type_error",
+  errorClass: "modal__error",
+};
 
 const previewModal = document.getElementById("preview-image-modal");
 const previewImage = previewModal.querySelector(".modal__image");
@@ -162,3 +182,5 @@ previewModal.addEventListener("click", function (evt) {
     closeModal(previewModal);
   }
 });
+
+enableValidation(settings);
