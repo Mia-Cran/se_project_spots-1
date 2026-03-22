@@ -111,12 +111,15 @@ editButton.addEventListener("click", function () {
   editProfileDescriptionInput.value = profileDescriptionEl.textContent;
   openModal(profileModal);
 });
+
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   profileNameEl.textContent = editProfileNameInput.value;
   profileDescriptionEl.textContent = editProfileDescriptionInput.value;
   closeModal(profileModal);
 }
+
+
 function handleNewPostFormSubmit(evt) {
   evt.preventDefault();
   const imageLink = evt.target.elements["card-image-input"].value;
@@ -155,7 +158,7 @@ newPostModalEl.addEventListener("click", function (evt) {
   if (evt.target === newPostModalEl) {
     closeModal(newPostModalEl);
   }
-});
+})
 
 previewModal.addEventListener("click", function (evt) {
   if (evt.target === previewModal) {

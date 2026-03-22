@@ -1,10 +1,9 @@
-import { enableValidation } from "../scripts/validation.js";
+import enableValidation  from "../utils/validation.js";
 import './index.css';
-import headerLogo from '../images/header__logo-image.svg';
-import profilePic from '../images/profile__picture.jpg';  
+import headerLogo from '../images/header-logo.svg';
+import profilePic from '../images/profilepic.jpg';  
 import plusSign from '../images/plus-sign.svg';
-import { Api } from './Api.js';
-
+import Api from "../utils/Api.js";
 
 document.querySelector('.header__logo-image').src = headerLogo;
 document.querySelector('.profile__picture').src = profilePic;
@@ -51,6 +50,14 @@ const settings = {
   errorClass: "modal__error",
 };
 
+const api = new Api({
+  baseUrl: "https://around-api.en.tripleten-services.com/v1",
+  headers: {
+    authorization: "6396738b-559a-4b24-8df0-2d3b78f72214",
+    "Content-Type": "application/json"
+  },
+});
+
 const previewModal = document.getElementById("preview-image-modal");
 const previewImage = previewModal.querySelector(".modal__image");
 const previewCaption = previewModal.querySelector(".modal__caption");
@@ -74,6 +81,7 @@ function renderCard(data) {
   const deleteButton = cardElement.querySelector(".card__delete-button");
   deleteButton.addEventListener("click", function () {
     deleteButton.closest(".card").remove();
+    openModal(deletePopupModal);
   });
   cardImageEl.addEventListener("click", () => {
     previewCaption.textContent = data.name;
@@ -108,12 +116,16 @@ const editProfileDescriptionInput = document.querySelector(
 const newPostButtonEl = document.querySelector(".profile__add-button");
 const editProfileForm = document.forms["edit-profile-form"];
 const newPostForm = document.forms["new-post-form"];
+const editAvatarForm = document.forms["edit-avatar-form"];
+const profileAvatarBtn = document.querySelector(".profile__avatar-btn");
+const editAvatarModal = document.querySelector("#edit-avatar-modal");
+const deletePopupModal = document.getElementById("delete-popup-modal");
 
 window.addEventListener('load', () => {
   console.log("Window loaded!");
-  const api = new Api();
   api.getUserInfo()
   .then((userData) => {
+    console.log(userData);
     profileNameEl.textContent = userData.name;
     profileDescriptionEl.textContent = userData.about;
   })
@@ -139,6 +151,8 @@ function handleEscapeKey(evt) {
       closeModal(newPostModalEl);
     if (previewModal.classList.contains("modal_is-opened"))
       closeModal(previewModal);
+    if (editAvatarModal.classList.contains("modal_is-opened"))
+      closeModal(editAvatarModal);
   }
 }
 
@@ -147,12 +161,32 @@ editButton.addEventListener("click", function () {
   editProfileDescriptionInput.value = profileDescriptionEl.textContent;
   openModal(profileModal);
 });
+
+function handleEditAvatar(event) {
+  event.preventDefault();
+  const avatarUrl = event.target.elements["profile-avatar-input"].value;
+  api.editAvatar({avatar: avatarUrl})
+  .then((userData) =>{
+    document.querySelector('.profile__picture').src = userData.avatar;
+    closeModal(editAvatarModal);
+  })
+  .catch(console.error);
+}
+
+
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
-  profileNameEl.textContent = editProfileNameInput.value;
-  profileDescriptionEl.textContent = editProfileDescriptionInput.value;
-  closeModal(profileModal);
+
+  api.editUserInfo({
+    name: editProfileNameInput.value,
+    about: editProfileDescriptionInput.value
+  }).then((res) => {
+    profileNameEl.textContent = res.name;
+    profileDescriptionEl.textContent = res.about;
+    closeModal(profileModal);
+  }).catch(console.error)
 }
+
 function handleNewPostFormSubmit(evt) {
   evt.preventDefault();
   const imageLink = evt.target.elements["card-image-input"].value;
@@ -165,6 +199,7 @@ function handleNewPostFormSubmit(evt) {
 }
 editProfileForm.addEventListener("submit", handleProfileFormSubmit);
 newPostForm.addEventListener("submit", handleNewPostFormSubmit);
+editAvatarForm.addEventListener("submit", handleEditAvatar);
 
 profileCloseButton.addEventListener("click", function () {
   closeModal(profileModal);
@@ -172,6 +207,10 @@ profileCloseButton.addEventListener("click", function () {
 
 newPostButtonEl.addEventListener("click", function () {
   openModal(newPostModalEl);
+});
+
+profileAvatarBtn.addEventListener("click", function () {
+  openModal(editAvatarModal);
 });
 
 newPostCloseButton.addEventListener("click", function () {
@@ -190,6 +229,11 @@ profileModal.addEventListener("click", function (evt) {
 newPostModalEl.addEventListener("click", function (evt) {
   if (evt.target === newPostModalEl) {
     closeModal(newPostModalEl);
+  }
+});
+editAvatarModal.addEventListener("click", function (evt) {
+  if (evt.target === editAvatarModal) {
+    closeModal(editAvatarModal);
   }
 });
 

@@ -1,15 +1,37 @@
 class Api {
-  constructor() {
-  this._baseUrl = "https://around-api.en.tripleten-services.com/v1";
-  this._headers = {
-    authorization: "c56e30dc-2883-4270-a59e-b2f7bae969c6"
-  };
+  constructor({baseUrl, headers}) {
+    this._baseUrl = baseUrl;
+    this._headers = headers;
   }
+
   getUserInfo() {
-  return fetch(`${this._baseUrl}/users/me`, {
-    headers: this._headers
-  })
-  .then(res => res.json());
+    return fetch(`${this._baseUrl}/users/me`, {
+      headers: this._headers
+    })
+      .then(res => res.json());
+  }
+
+  editUserInfo({ name, about }) {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: "PATCH",
+      headers: this._headers,
+      body: JSON.stringify({
+        name,
+        about,
+      }),
+    }).then((res) => {
+      return res.json();
+    });
+  }
+  editAvatar({ avatar }) {
+  return fetch(`${this._baseUrl}/users/me/avatar`, {
+    method: "PATCH",
+    headers: this._headers,
+    body: JSON.stringify({ avatar }),
+  }).then((res) => {
+    return res.json();
+  });
 }
+
 }
-export { Api };
+export default  Api;

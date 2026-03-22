@@ -13,25 +13,28 @@
       content="web developer, HTML, CSS, JavaScript, portfolio"
     />
     <title>Spots</title>
-    <link rel="shortcut icon" href="favicon.ico" />
   </head>
   <body>
     <div class="page">
       <header class="header">
-        <img
-          alt="Spot logo"
-          src="../images/header__logo-image.svg"
-          class="header__logo-image"
-        />
+        <img alt="Spot logo" src="" class="header__logo-image" />
       </header>
       <main class="content">
         <section class="profile">
           <div class="profile__pic">
-            <img
-              src="../images/profile__picture.jpg"
-              alt="Profile Picture"
-              class="profile__picture"
-            />
+            <img src="" alt="Profile Picture" class="profile__picture" />
+            <button type="button" class="profile__avatar-btn">
+             <img
+             class="profile__pencil__light"
+             src="<%=require('./images/pencil__light.png')%>"
+             alt="Pencil icon"
+             />
+            </button>
+               <img
+                src=""
+                alt="Bessie Coleman"
+                class="profile__editavatar"
+              />
           </div>
           <div class="profile__content">
             <h1 class="profile__name">Bessie Coleman</h1>
@@ -41,11 +44,7 @@
             </button>
           </div>
           <button type="button" class="profile__add-button">
-            <img
-              src="../images/plus-sign.svg"
-              alt="Plus Sign"
-              class="plus plus-sign"
-            />
+            <img src="" alt="Plus Sign" class="plus plus-sign" />
             New Post
           </button>
         </section>
@@ -56,7 +55,7 @@
                 <img
                   alt=""
                   class="card__image"
-                  src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                  src=""
                 />
                 <div class="card__content">
                   <h3 class="card__title"></h3>
@@ -106,6 +105,26 @@
         </form>
       </div>
     </div>
+    <div class="modal" id="edit-avatar-modal">
+      <div class="modal__container">
+        <button type="button" class="modal__close-btn"></button>
+        <h2 class="modal__title">Change profile picture</h2>
+        <form class="modal__form" name="edit-avatar-form">
+          <label for="profile-avatar-input" class="modal__label">
+            Avatar URL
+            <input
+              id="profile-avatar-input"
+              type="url"
+              class="modal__input"
+              placeholder="Paste an image link"
+              required
+            />
+            <span id="profile-avatar-input-error" class="modal__error"></span>
+          </label>
+          <button type="submit" class="modal__submit-btn">Save</button>
+        </form>
+      </div>
+    </div>
     <div class="modal" id="new-post-modal">
       <div class="modal__container">
         <button type="button" class="modal__close-btn"></button>
@@ -150,9 +169,19 @@
         <img
           alt=""
           class="modal__image"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          src=""
         />
         <p class="modal__caption"></p>
+      </div>
+    </div>
+    <div class="modal" id="delete-popup-modal">
+      <div class="modal__container">
+        <button type="button" class="modal__close-btn"></button>
+      <h2 class="modal__title">Are you sure you want to delete the image?</h2>
+      <div class="modal-buttons">
+        <button class="modal__button" type=button>Delete</button>
+        <button class="modal__button" type=button>Cancel</button>
+      </div>
       </div>
     </div>
   </body>
