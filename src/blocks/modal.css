@@ -29,6 +29,53 @@
   position: relative;
   box-sizing: border-box;
 }
+.delete__popupmodal__container {
+  position: relative;
+  background-color: white;
+  padding: 10px 60px;
+  border-radius: 8px;
+
+}
+
+.delete__modal-buttons {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  padding: 18px 32px;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+.delete__modal__button:first-child {
+  background-color: #FF6565;
+  color: black;
+  border-radius: 8px;
+  padding: 18px 32px;
+  width: 156px;
+
+
+}
+.cancel__modal__button:last-child {
+  background-color: white;
+  color: black;
+  padding: 18px 32px;
+  border-radius: 8px;
+  width: 156px;
+
+}
+.cancel__modal__button:last-child:hover {
+  background-color: black;
+  color: white;
+}
+.delete__modal__close-btn {
+  color: #FFFFFF;
+  position: absolute;
+  border: none;
+  width: 40px;;
+  height: 40px;
+  background: url("../images/popupFormCloseIcon.png") center no-repeat transparent;
+  right: -55px;
+  top: 2px;
+}
 
 .modal__close-btn {
   position: absolute;
@@ -47,9 +94,10 @@
 .modal__close-btn:hover {
   opacity: 1;
 }
-.modal__title {
-  /* margin: top left & right bottom*/
-  margin: 0 0 32px;
+.delete__modal__title {
+  margin: 20px 0 32px;
+  height: 24px; 
+  style: medium;
   font-weight: 500;
   font-size: 32px;
   font-family: "Poppins", sans-serif;

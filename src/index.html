@@ -24,17 +24,13 @@
           <div class="profile__pic">
             <img src="" alt="Profile Picture" class="profile__picture" />
             <button type="button" class="profile__avatar-btn">
-             <img
-             class="profile__pencil__light"
-             src="<%=require('./images/pencil__light.png')%>"
-             alt="Pencil icon"
-             />
-            </button>
-               <img
-                src=""
-                alt="Bessie Coleman"
-                class="profile__editavatar"
+              <img
+                class="profile__pencil__light"
+                src="<%=require('./images/pencil__light.png')%>"
+                alt="Pencil icon"
               />
+            </button>
+            <img src="" alt="Bessie Coleman" class="profile__editavatar" />
           </div>
           <div class="profile__content">
             <h1 class="profile__name">Bessie Coleman</h1>
@@ -52,11 +48,7 @@
           <ul class="cards__list">
             <template id="card-template">
               <li class="card">
-                <img
-                  alt=""
-                  class="card__image"
-                  src=""
-                />
+                <img alt="" class="card__image" src="" />
                 <div class="card__content">
                   <h3 class="card__title"></h3>
                   <button type="button" class="card__like-button"></button>
@@ -166,22 +158,20 @@
           type="button"
           class="modal__close-btn modal__close-btn_type_preview"
         ></button>
-        <img
-          alt=""
-          class="modal__image"
-          src=""
-        />
+        <img alt="" class="modal__image" src="" />
         <p class="modal__caption"></p>
       </div>
     </div>
     <div class="modal" id="delete-popup-modal">
-      <div class="modal__container">
-        <button type="button" class="modal__close-btn"></button>
-      <h2 class="modal__title">Are you sure you want to delete the image?</h2>
-      <div class="modal-buttons">
-        <button class="modal__button" type=button>Delete</button>
-        <button class="modal__button" type=button>Cancel</button>
-      </div>
+      <div class="delete__popupmodal__container">
+        <button type="button" class="delete__modal__close-btn"></button>
+        <h2 class="delete__modal__title">
+          Are you sure you want to delete the image?
+        </h2>
+        <div class="delete__modal-buttons">
+          <button class="delete__modal__button" type="button">Deleting...</button>
+          <button class="cancel__modal__button" type="button">Cancel</button>
+        </div>
       </div>
     </div>
   </body>
