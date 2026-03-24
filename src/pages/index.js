@@ -69,38 +69,44 @@ const cardsList = document.querySelector(".cards__list");
 
 function renderCard(data) {
   console.log(data);
+
   const cardElement = cardTemplate.content
     .querySelector(".card")
     .cloneNode(true);
+
   const cardTitleEl = cardElement.querySelector(".card__title");
   const cardImageEl = cardElement.querySelector(".card__image");
-  
-  const isLiked = isLiked.classList.contains("card__like-button_is-liked");
   const likeButton = cardElement.querySelector(".card__like-button");
-  likeButton.addEventListener("click", function () {
-    likeButton.classList.toggle("card__like-button_is-liked");
+  const deleteButton = cardElement.querySelector(".card__delete-button");
 
-    if(!isLiked) {
+  // IMPORTANT: set cardId here
+  cardElement.dataset.cardId = data._id;
+
+  likeButton.addEventListener("click", function () {
+    const cardId = cardElement.dataset.cardId;
+
+    const isLiked = likeButton.classList.contains("card__like-button_is-liked");
+
+    if (!isLiked) {
       api.addLike(cardId)
-        .then((updatedCard) => {
+        .then(() => {
           likeButton.classList.add("card__like-button_is-liked");
         })
         .catch(console.error);
-      } else {
-        api.removeLike(cardId)
-        .then((updatedCard) => {
+    } else {
+      api.removeLike(cardId)
+        .then(() => {
           likeButton.classList.remove("card__like-button_is-liked");
         })
         .catch(console.error);
-      }
+    }
   });
 
-  const deleteButton = cardElement.querySelector(".card__delete-button");
   deleteButton.addEventListener("click", function () {
     openModal(deletePopupModal);
     cardToDelete = deleteButton.closest(".card");
-  
   });
+
   cardImageEl.addEventListener("click", () => {
     previewCaption.textContent = data.name;
     previewImage.src = data.link;
@@ -111,12 +117,13 @@ function renderCard(data) {
   cardImageEl.src = data.link;
   cardImageEl.alt = data.name;
   cardTitleEl.textContent = data.name;
+
   return cardElement;
 }
+
 api.getCards().then(function (cards) {
   cards.forEach(function(card) {
      const cardElement = renderCard(card);
-     cardElement.dataset.cardId = card._id;
      cardsList.prepend(cardElement);
   });
 });
@@ -189,48 +196,79 @@ editButton.addEventListener("click", function () {
 
 function handleEditAvatar(event) {
   event.preventDefault();
+
+  const submitButton = event.submitter;
+  submitButton.textContent = "saving...";
+
   const avatarUrl = event.target.elements["profile-avatar-input"].value;
   api.editAvatar({avatar: avatarUrl})
   .then((userData) =>{
     document.querySelector('.profile__picture').src = userData.avatar;
     closeModal(editAvatarModal);
   })
-  .catch(console.error);
+  .catch(console.error)
+  .finally(() => {
+    setTimeout(() => {
+      submitButton.textContent = "save";
+  }, 500);
+});
 }
 
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
 
-  api.editUserInfo({
-    name: editProfileNameInput.value,
-    about: editProfileDescriptionInput.value
-  }).then((res) => {
-    profileNameEl.textContent = res.name;
-    profileDescriptionEl.textContent = res.about;
-    closeModal(profileModal);
-  }).catch(console.error)
+  const submitButton = evt.submitter;
+  submitButton.textContent = "Saving...";
+
+  setTimeout(() => {
+    api.editUserInfo({
+      name: editProfileNameInput.value,
+      about: editProfileDescriptionInput.value
+    })
+      .then((res) => {
+        profileNameEl.textContent = res.name;
+        profileDescriptionEl.textContent = res.about;
+
+        submitButton.textContent = "Saved!";
+
+        setTimeout(() => {
+          closeModal(profileModal);
+          submitButton.textContent = "Save";
+        }, 1500);
+      })
+      .catch(console.error);
+  }, 800);
 }
+
 
 function handleNewPostFormSubmit(evt) {
   evt.preventDefault();
-  
+
   const titleValue = newPostTitleInput.value;
   const linkValue = newPostImageInput.value;
   const submitButton = evt.submitter;
-  submitButton.textContent = "saving...";
+  submitButton.textContent = "Saving...";
 
-  api.addCard({ name: titleValue, link: linkValue })
-    .then((newCard) => {
-      const cardElement = renderCard(newCard);
-      cardsList.prepend(cardElement);
-      closeModal(newPostModalEl);
-      newPostForm.reset();
-    })
-    .catch((err) => {
-      console.error(err);
-    }).finally(() => submitButton.textContent = "save");
-    
+  setTimeout(() => {
+    api.addCard({ name: titleValue, link: linkValue })
+      .then((newCard) => {
+        const cardElement = renderCard(newCard);
+        cardsList.prepend(cardElement);
+
+        submitButton.textContent = "Saved!";
+
+        setTimeout(() => {
+          closeModal(newPostModalEl);
+          newPostForm.reset();
+          submitButton.textContent = "Save";
+        }, 1500);
+      })
+      .catch((err) => {
+        console.error(err);
+        submitButton.textContent = "Save";
+      });
+  }, 800);
 }
 
 editProfileForm.addEventListener("submit", handleProfileFormSubmit);
@@ -277,16 +315,30 @@ deleteModalCloseBtn.addEventListener("click", function() {
   closeModal(deletePopupModal);
 });
 
-document.querySelector(".delete__modal__button").addEventListener("click", function(){
-  api.removeCard(cardToDelete.dataset.cardId)
-    .then(() => {
-      cardToDelete.remove();
-      closeModal(deletePopupModal);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+
+const deleteModalButton = document.querySelector(".delete__modal__button");
+
+deleteModalButton.addEventListener("click", function () {
+  deleteModalButton.textContent = "Deleting...";
+
+  setTimeout(() => {
+    api.removeCard(cardToDelete.dataset.cardId)
+      .then(() => {
+        cardToDelete.remove();
+        deleteModalButton.textContent = "Deleted!";
+
+        setTimeout(() => {
+          closeModal(deletePopupModal);
+          deleteModalButton.textContent = "delete";
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err);
+        deleteModalButton.textContent = "delete";
+      });
+  }, 1500);
 });
+
 
 previewModal.addEventListener("click", function (evt) {
   if (evt.target === previewModal) {
