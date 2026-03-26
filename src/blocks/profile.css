@@ -22,6 +22,12 @@
 .profile__pic:hover .profile__avatar-btn {
   opacity: 1;
 }
+.profile__picture {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 
 .profile__avatar-btn {
   position: absolute;

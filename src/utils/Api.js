@@ -3,6 +3,18 @@ class Api {
     this._baseUrl = baseUrl;
     this._headers = headers;
   }
+   _handleResponse(res) {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Error: ${res.status}`);
+  }
+    getAppInfo() {
+    return Promise.all([
+      this.getUserInfo(),
+      this.getCards()
+    ]);
+  }
 
   getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
@@ -65,7 +77,7 @@ class Api {
 }
   removeLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-      method: "PUT",
+      method: "DELETE",
       headers: this._headers,
     }).then((res) => {
       return res.json();
