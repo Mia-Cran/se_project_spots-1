@@ -46,6 +46,10 @@ function renderCard(data) {
   const likeButton = cardElement.querySelector(".card__like-button");
   const deleteButton = cardElement.querySelector(".card__delete-button");
 
+  if (data.isLiked) {
+  likeButton.classList.add("card__like-button_is-liked");
+}
+
   // IMPORTANT: set cardId here
   cardElement.dataset.cardId = data._id;
 
